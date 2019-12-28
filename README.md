@@ -27,19 +27,72 @@ The database contains the following tables:
 
 ![ERD](/images/parch-posey-erd.png "Entity Relationship Diagram")
 
-### CSV Data Files
+### Importing Data
 
-There are CSV files within the /data folder holding the raw data for import and scripts if users wish to import the data themselves. In addition, there is a `create_tables.sql` script There are also two Excel files with formulas showing how the individual data lines were created. An important thing to note about the scripts is some difference between PostgreSQL and SQLite.
+Within the /script folder there is a `create_tables.sql` script to create empty tables. An Excel file holds all the data extracted from the course DB. Within each sheet are formulas for creating the import scripts. One script exists for each table and can be ran using the command line. This is recommended as SQLite Studio had difficulty importing the larger data.
 
+---
 **It is not necessary to create the DB, tables and load the data from scratch.**
 
 **A SQLite database exists ready to use as _parch_posey.db_**
 
-The CSV files were pulled from another repository. There were _some_ missing values among the order data. This was handled by inserting NULL into the scripts. It appears that in the online Postgres DB these have zereos instead. Therefore, when running some queries that specify numeric columns that equal zero one must instead include the condition of checking for NULL as well.
+Clicking on the file name link above will open a new page with a download option.
+---
 
-There is a huge difference between a value of zero and one that does not exist. I'm not certain if this course purposely inserted zereos for simplicity sake as this database is used in more than one Udacity course based on the repositories available on GitHub.
+Previously, the data were pulled from another repository. There were _some_ missing values among the order data. This was handled by inserting NULL into the scripts. It appears that in the online Postgres DB these have zereos instead. _Data has since been pulled from the course DB and reloaded to eliminate any data differences_.
 
-Another important note for students is that PostgreSQL attempts to stay close to the SQL standard and so there may be differences in how a query is written. Although, most of the queries for this course are rather standard and don't rely on DBMS specific functions, etc.
+Another important note is that PostgreSQL attempts to stay close to the SQL standard and so there may be differences in how a query is written. Although, most of the queries for this course are rather standard and don't rely on DBMS specific functions, etc. The most obvious difference is how dates are handled. A short example follows:
+
+Databases store dates from biggest to most granular | YYYY MM DD HH MM SS
+
+References for PostgreSQL using [DATE_TRUNC](http://www.postgresqltutorial.com/postgresql-date_trunc/) and [DATE_PART](https://www.postgresql.org/docs/9.1/functions-datetime.html)
+
+Reference for SQLite3 [strftime](https://www.w3resource.com/sqlite/sqlite-strftime.php)
+
+**PostgreSQL**
+```
+SELECT DATE_PART('year', o.occurred_at) as Year,
+       DATE_PART('month', o.occurred_at) as Month,
+       SUM(gloss_amt_usd) AS gloss_amt_usd
+FROM orders o
+JOIN accounts a
+  ON o.account_id = a.id
+WHERE a.name = 'Walmart'
+GROUP BY Month, Year
+ORDER BY gloss_amt_usd DESC;
+```
+
+**SQLite**
+```
+SELECT strftime('%Y', o.occurred_at) as Year,
+       strftime('%m', o.occurred_at) as Month,
+       SUM(gloss_amt_usd) AS gloss_amt_usd
+FROM orders o
+JOIN accounts a
+  ON o.account_id = a.id
+WHERE a.name = 'Walmart'
+GROUP BY Month, Year
+ORDER BY gloss_amt_usd DESC;
+```
+
+**OUTPUT**
+Year | Month | gloss_amt_usd
+---- | ----- | -------------
+2016 | 05 | 9257.64
+2016 | 01 | 5070.73
+2015 | 11 | 4890.97
+2016 | 04 | 4875.99
+2015 | 12 | 4823.55
+2016 | 03 | 4711.21
+2016 | 02 | 4673.76
+2016 | 09 | 4673.75
+2016 | 08 | 4531.45
+2016 | 11 | 4359.18
+2016 | 07 | 4254.32
+2016 | 10 | 1071.07
+2016 | 12 | 951.23
+2016 | 06 | 344.54
+2015 | 10 | 164.78
 
 
 

@@ -50,7 +50,7 @@ SELECT total_amt_usd
 SELECT o.account_id,  a.name,
        SUM(total) AS "Total AMT", 
        SUM(total_amt_usd) AS "Total USD",
-       SUM(total_amt_usd / total) AS "Total Unit Price"
+       SUM(total_amt_usd / (total + 0.01)) AS "Total Unit Price"
 FROM orders o
 JOIN accounts a
   ON o.account_id = a.id
@@ -159,7 +159,7 @@ JOIN sales_reps s
 JOIN web_events w
   ON a.id = w.account_id
 GROUP BY s.name, w.channel  
-ORDER BY s.name;
+ORDER BY 1, 2;
 
 /*
 4) Determine the number of times a particular channel was used in the web_events table for each region. 
