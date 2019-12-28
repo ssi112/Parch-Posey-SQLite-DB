@@ -1,6 +1,4 @@
-
-INSERT INTO accounts (id, name, website, lat, long, primary_poc, sales_rep_id)
-VALUES
+INSERT INTO accounts (id, name, website, lat, long, primary_poc, sales_rep_id) VALUES
 (1001,  'Walmart',  'www.walmart.com',  40.23849561,  -75.10329704,   'Tamara Tuma',  321500),
 (1011,  'Exxon Mobil',  'www.exxonmobil.com',   41.1691563,   -73.84937379,   'Sung Shields',   321510),
 (1021,  'Apple',  'www.apple.com',  42.29049481,  -76.08400942,   'Jodee Lupo',   321520),
@@ -351,5 +349,4 @@ VALUES
 (4471,  'Oneok',  'www.oneok.com',  45.51351286,  -122.68150011,  'Esta Engelhardt',  321960),
 (4481,  'Newmont Mining',   'www.newmont.com',  45.49411669,  -122.66946042,  'Khadijah Riemann',   321970),
 (4491,  'PPL',  'www.pplweb.com',   45.49172048,  -122.67187978,  'Deanne Hertlein',  321960),
-(4501,  'SpartanNash',  'www.spartannash.com',  45.55565141,  -122.65714478,  'Jewell Likes',   321970) ;
-
+(4501,  'SpartanNash',  'www.spartannash.com',  45.55565141,  -122.65714478,  'Jewell Likes',   321970);

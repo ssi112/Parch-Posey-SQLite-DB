@@ -1,5 +1,4 @@
-INSERT INTO web_events (id, account_id, occurred_at, channel)
-VALUES
+INSERT INTO web_events (id, account_id, occurred_at, channel) VALUES
 (1,   1001,   '2015-10-06T17:13:58.000Z',   'direct'),
 (2,   1001,   '2015-11-05T03:08:26.000Z',   'direct'),
 (3,   1001,   '2015-12-04T03:57:24.000Z',   'direct'),
