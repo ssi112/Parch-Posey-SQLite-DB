@@ -32,22 +32,20 @@ The database contains the following tables:
 Within the /script folder there is a `create_tables.sql` script to create empty tables. An Excel file holds all the data extracted from the course DB. Within each sheet are formulas for creating the import scripts. One script exists for each table and can be ran using the command line. This is recommended as SQLite Studio had difficulty importing the larger data.
 
 ---
+
 **It is not necessary to create the DB, tables and load the data from scratch.**
 
 **A SQLite database exists ready to use as _parch_posey.db_**
 
 Clicking on the file name link above will open a new page with a download option.
+
 ---
 
-Previously, the data were pulled from another repository. There were _some_ missing values among the order data. This was handled by inserting NULL into the scripts. It appears that in the online Postgres DB these have zereos instead. _Data has since been pulled from the course DB and reloaded to eliminate any data differences_.
+Previously, the data were pulled from another repository. There were _some_ missing values among the orders table data. This was handled by inserting NULL into the scripts. It appears that in the online Postgres DB these have zereos instead. _Data has since been pulled from the course DB and reloaded to eliminate any data differences_.
 
 Another important note is that PostgreSQL attempts to stay close to the SQL standard and so there may be differences in how a query is written. Although, most of the queries for this course are rather standard and don't rely on DBMS specific functions, etc. The most obvious difference is how dates are handled. A short example follows:
 
 Databases store dates from biggest to most granular | YYYY MM DD HH MM SS
-
-References for PostgreSQL using [DATE_TRUNC](http://www.postgresqltutorial.com/postgresql-date_trunc/) and [DATE_PART](https://www.postgresql.org/docs/9.1/functions-datetime.html)
-
-Reference for SQLite3 [strftime](https://www.w3resource.com/sqlite/sqlite-strftime.php)
 
 **PostgreSQL**
 ```
@@ -75,7 +73,9 @@ GROUP BY Month, Year
 ORDER BY gloss_amt_usd DESC;
 ```
 
+
 **OUTPUT**
+
 Year | Month | gloss_amt_usd
 ---- | ----- | -------------
 2016 | 05 | 9257.64
@@ -96,4 +96,10 @@ Year | Month | gloss_amt_usd
 
 
 
+
+
+
+References for PostgreSQL using [DATE_TRUNC](http://www.postgresqltutorial.com/postgresql-date_trunc/) and [DATE_PART](https://www.postgresql.org/docs/9.1/functions-datetime.html)
+
+Reference for SQLite3 [strftime](https://www.w3resource.com/sqlite/sqlite-strftime.php)
 
