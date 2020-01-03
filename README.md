@@ -73,7 +73,6 @@ GROUP BY Month, Year
 ORDER BY gloss_amt_usd DESC;
 ```
 
-
 **OUTPUT**
 
 Year | Month | gloss_amt_usd
@@ -84,22 +83,60 @@ Year | Month | gloss_amt_usd
 2016 | 04 | 4875.99
 2015 | 12 | 4823.55
 2016 | 03 | 4711.21
-2016 | 02 | 4673.76
-2016 | 09 | 4673.75
-2016 | 08 | 4531.45
-2016 | 11 | 4359.18
-2016 | 07 | 4254.32
-2016 | 10 | 1071.07
-2016 | 12 | 951.23
-2016 | 06 | 344.54
-2015 | 10 | 164.78
-
-
-
-
 
 
 References for PostgreSQL using [DATE_TRUNC](http://www.postgresqltutorial.com/postgresql-date_trunc/) and [DATE_PART](https://www.postgresql.org/docs/9.1/functions-datetime.html)
 
 Reference for SQLite3 [strftime](https://www.w3resource.com/sqlite/sqlite-strftime.php)
+
+---
+
+
+Another area where the two DBs differ are some string handling functions. In the lesson on data cleansing the course uses a different table: SF Crime Data which has dates formatted in the following manner: 01/31/2014 08:00:00 AM +0000.
+
+To convert this to a proper SQL date the `SUBSTRING` function can be used in both systems.
+
+`SUBSTRING ( string, start_position, length )`
+
+As example:
+
+```
+WITH d1 AS (SELECT date,
+            SUBSTRING(date, 1, 2) AS month,
+            SUBSTRING(date, 4, 2) AS day,
+            SUBSTRING(date, 7, 4) AS year
+FROM sf_crime_data
+LIMIT 10
+)
+SELECT *,  year || '-' || month || '-' || day AS new_date,
+       CAST( year || '-' || month || '-' || day AS date ) AS sql_date
+FROM d1;
+```
+
+On the othe hand, SQLite has a `SUBSTR` function that performs the same function. With PostqreSQL you can use `LEFT` and `RIGHT` functions to solve similar problems. Note SQLite does _not_ have either of those.
+
+**SQLite**
+```
+SELECT primary_poc,
+       '[' || SUBSTR(primary_poc, 0, INSTR(primary_poc, ' ')) || ']' AS fname,
+       '[' || SUBSTR(primary_poc, INSTR(primary_poc, ' ') + 1, LENGTH(primary_poc) - INSTR(primary_poc, ' ')) || ']' as lname,
+       LENGTH(primary_poc) AS len,
+       INSTR(primary_poc, ' ') AS pos
+FROM accounts;
+```
+
+**PostgreSQL**
+```
+SELECT primary_poc,
+       '[' || LEFT(primary_poc, STRPOS(primary_poc, ' ') - 1) || ']' AS fname,
+       '[' || RIGHT(primary_poc, LENGTH(primary_poc) - STRPOS(primary_poc, ' ')) || ']' AS lname
+FROM accounts;
+```
+
+Also, note that SQLite made use of the `INSTR` function while PostgreSQL used `STRPOS` to find the position of a string within a string.
+
+Reference:
+ * SQLite => https://sqlite.org/lang_corefunc.html#instr
+ * PostgreSQL => https://www.postgresql.org/docs/current/functions-string.html
+
 
